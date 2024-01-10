@@ -1,7 +1,29 @@
-import { MinLength, IsEmail, Matches } from 'class-validator';
+import {
+  Matches,
+  IsNotEmpty,
+  IsNotEmptyObject,
+  ValidateNested,
+} from 'class-validator';
+// import NameDTO from './name.dto';
+import AddressDTO from './address.dto';
+import ImageDTO from './image.dto';
+import NameDTO from './name.dto';
 
 export class RegisterUserDto {
-  @IsEmail()
+  @Matches(/0[0-9]{1,2}\-?\s?[0-9]{3}\s?[0-9]{4}/, {
+    message: 'phone must be a valid phone number',
+  })
+  phone: string;
+
+  @IsNotEmpty()
+  name: NameDTO;
+
+  @IsNotEmpty()
+  address: AddressDTO;
+
+  @IsNotEmpty()
+  image: ImageDTO;
+
   @Matches(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/, {
     message: 'email must be a valid email',
   })
@@ -15,4 +37,8 @@ export class RegisterUserDto {
     },
   )
   password: string;
+}
+
+function ApiProperty(): (target: RegisterUserDto, propertyKey: 'name') => void {
+  throw new Error('Function not implemented.');
 }
