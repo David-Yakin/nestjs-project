@@ -29,19 +29,16 @@ export class UsersService {
   async login(user: LoginInterface) {
     try {
       const { email, password: passwordFromClient } = user;
-      console.log(1);
 
       const userFromDb = await this.userModule.findOne({ email });
       if (!userFromDb) throw new Error('Invalid email or password');
       const { _id, isAdmin, password: passwordFromDB } = userFromDb;
-      console.log(2);
 
       const validPassword = comparePassword(passwordFromClient, passwordFromDB);
       if (!validPassword) throw new Error('Invalid email or password');
-      console.log(3);
 
       const token = generateAuthToken({ _id, isAdmin });
-      console.log(4);
+
       return token;
     } catch (error) {
       return Promise.reject(error);

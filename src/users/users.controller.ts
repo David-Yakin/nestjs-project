@@ -13,16 +13,29 @@ import {
   ValidationPipe,
   BadRequestException,
   UnauthorizedException,
+  Req,
 } from '@nestjs/common';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { UpdateUserDto } from './dto/update-user-info.dto';
 import { UsersService } from './users.service';
 import { AdminGuard } from 'src/auth/guards/admin/admin.guard';
 import { LoginDTO } from './dto/login.dto';
+import { LoginGuard } from 'src/auth/guards/login/login.guard';
+import { UserPayloadInterface } from 'src/auth/interfaces/TokenInterface';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
+
+  // @Get()
+  // @UseGuards(LoginGuard)
+  // getUsers() {
+  //   try {
+  //     return [];
+  //   } catch (error) {
+  //     return error.message;
+  //   }
+  // }
 
   @Get()
   @UseGuards(AdminGuard)
@@ -53,6 +66,35 @@ export class UsersController {
       throw new BadRequestException(error);
     }
   }
+  // @UsePipes(ValidationPipe)
+
+  @Put(':userId')
+  @UseGuards(LoginGuard)
+  updateUserInfo(
+    @Req() req: UserPayloadInterface,
+    @Param('userId') userId: string,
+  ) {
+    try {
+      if (req.user._id !== userId) throw new UnauthorizedException();
+      return { message: 'success' };
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+  // @Put(':userId')
+  // @UseGuards(LoginGuard)
+  // async updateUserInfo(
+  //   @Req() req: UserPayloadInterface,
+  //   @Param('userId') userId: string,
+  //   @Body(new ValidationPipe()) user: RegisterUserDto,
+  // ) {
+  //   try {
+  //     console.log(req.user, userId);
+  //     if (req.user._id !== userId) throw new UnauthorizedException();
+  //   } catch (error) {
+  //     throw new BadRequestException(error);
+  //   }
+  // }
 
   @Post('/login')
   @UsePipes(ValidationPipe)
@@ -64,12 +106,6 @@ export class UsersController {
       throw new UnauthorizedException(error);
     }
   }
-
-  @Put(':userId')
-  updateUserInfo(
-    @Param('userId') userId: string,
-    @Body() user: UpdateUserDto,
-  ) {}
 
   @Patch(':userId')
   changeStatus(@Param('userId') userId: string) {}
