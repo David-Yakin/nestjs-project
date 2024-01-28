@@ -13,6 +13,7 @@ class AddressDTO {
   street: string;
 
   houseNumber: number;
+
   zip?: number;
 }
 

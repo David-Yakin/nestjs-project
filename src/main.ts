@@ -1,8 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { blue, red } from 'chalk';
+import { config } from 'dotenv';
+config();
 
-const PORT = 3000;
+const PORT = process.env.SERVER_PORT || 3000;
 
 async function bootstrap() {
   try {

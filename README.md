@@ -71,3 +71,96 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## API Reference
+
+Server uri locally
+
+`http://localhost:3000/`
+
+### Users Api
+
+All users API start with
+
+`/users/`
+
+#### Register user
+
+```http
+  POST /users
+```
+
+**Request**
+
+| Parameter | key         | value  | Type   | Description  |
+| :-------- | :---------- | :----- | :----- | :----------- |
+| email     |             |        | string | **Required** |
+| password  |             |        | string | **Required** |
+| name      |             |        | object | **Required** |
+|           | first       | string |        | **Required** |
+|           | middle      | string |        |              |
+|           | last        | string |        | **Required** |
+| phone     |             |        | string | **Required** |
+| address   |             |        | object | **Required** |
+|           | state       |        | string | **Required** |
+|           | country     |        | string | **Required** |
+|           | city        |        | string | **Required** |
+|           | street      |        | string | **Required** |
+|           | houseNumber |        | number | **Required** |
+|           | zip         |        | number |              |
+| image     |             |        | object | **Required** |
+|           | url         |        | string |              |
+|           | alt         |        | string |              |
+
+- email must be a valid email address
+- Password must be at least nine characters long and contain an uppercase letter, a lowercase letter, a number and one of the following characters !@#$%^&\*-
+- phone must be a valid israeli phone number
+
+**Response**
+
+| Parameter | key         | value  | Type    |
+| :-------- | :---------- | :----- | :------ |
+| \_id      |             |        | string  |
+| email     |             |        | string  |
+| password  |             |        | string  |
+| name      |             |        | object  |
+|           | first       | string |         |
+|           | middle      | string |         |
+|           | last        | string |         |
+|           | \_id        | string |         |
+| phone     |             |        | string  |
+| address   |             |        | object  |
+|           | state       |        |         |
+|           | country     |        | string  |
+|           | city        |        | string  |
+|           | street      |        | string  |
+|           | houseNumber |        | number  |
+|           | zip         |        | number  |
+|           | \_id        |        | number  |
+| image     |             |        | object  |
+|           | url         |        | string  |
+|           | alt         |        | string  |
+|           | \_id        |        | string  |
+| isAdmin   |             |        | boolean |
+| createdAt |             |        | Date    |
+| \_\_v     |             |        | string  |
+
+#### Get Token
+
+```http
+  POST /users/login
+```
+
+**Request**
+
+| Parameter | Type   | Description  |
+| :-------- | :----- | :----------- |
+| email     | string | **Required** |
+| password  | string | **Required** |
+
+- email must match the email of the requested user
+- Password must be the password of the requested user
+
+**Response**
+
+Encrypted token (string)

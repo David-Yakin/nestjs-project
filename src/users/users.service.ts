@@ -6,6 +6,7 @@ import LoginInterface from './interface/LoginInterface';
 import { generateAuthToken } from 'src/auth/helpers/jwt';
 import { comparePassword, generateUserPassword } from './helpers/bcrypt';
 import { RegisterUserDto } from './dto/register-user.dto';
+import normalizeUser from './helpers/normalize.user';
 
 @Injectable()
 export class UsersService {
@@ -15,7 +16,8 @@ export class UsersService {
 
   async createNewUser(user: RegisterUserDto) {
     try {
-      const userFromMongoose = new this.userModule(user);
+      const normalizedUser = normalizeUser(user);
+      const userFromMongoose = new this.userModule(normalizedUser);
       const encryptedPassword = generateUserPassword(user.password);
       if (encryptedPassword) userFromMongoose.password = encryptedPassword;
       const userFromDB = await userFromMongoose.save();
