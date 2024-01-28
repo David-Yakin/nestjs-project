@@ -1,13 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { blue } from 'chalk';
+import { blue, red } from 'chalk';
 
 const PORT = 3000;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(PORT, () => {
-    console.log(blue(`Listening on: http//:localhost:${PORT}`));
-  });
+  try {
+    const app = await NestFactory.create(AppModule);
+    await app.listen(PORT, () => {
+      console.log(blue(`Listening on: http//:localhost:${PORT}`));
+    });
+  } catch (error) {
+    console.log(red(error.message));
+  }
 }
 bootstrap();

@@ -1,15 +1,17 @@
-import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { MongooseModule } from '@nestjs/mongoose';
+import MongodbModule from './dal/MongodbModule';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
+import HTTPLoggerMiddleware from './global/loggers/HTTPLoggerMiddleware';
 
 @Module({
-  imports: [
-    UsersModule,
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/nestjs-project'),
-  ],
+  imports: [UsersModule, MongodbModule],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(HTTPLoggerMiddleware).forRoutes('*');
+  }
+}
